@@ -1,0 +1,79 @@
+Pure Storage 8:
+
+1) 75 Min
+
+2) 打印路径 DFS   
+
+5, 1, 8, 5, 11, 5, 4, 4, 3,9, 2, 12
+
+3） 选择数据结构 
+有人选： balanced tree 和hashmap
+
+也有人选：选的array，要遍历的时候quick sort，或者linked list，或者preallocated array，timestamp作为index
+
+4） 计算memory page需要的空间(多少bytes)。。每个memory page有 1. page status(3个状态) 2. page index (0 - 364847) 3. access mode (6 种状态) 4. process id (0- 37337)。。
+
+答案是5 bytes
+
+5） 多选题。给一个storage的design，然后多选design的潜在问题。 这个storage其实就是个array。。现在有好多threads 试图往这个array里存东西。。问会发生什么问题。
+
+选项有deadlock.. resource leak 等等
+
+memory leak， thread unsafe
+
+6） 给一个binary search 算法，要求给出算法出错的情况。。 这题很简单。。
+
+错误就是忘记在loop检查等于的情况
+
+3
+1 2 3
+2
+
+7） 找出一个string里palindromes的数量
+
+public int countPalindroms(String str) {
+		if(str == null || str.length() == 0) return 0;
+		int res = 0;
+		for(int i = 0; i < str.length(); i++) {
+			for(int j = i + 1; j <= str.length(); j++) {
+				String temp = str.substring(i, j);
+				if(isPalindrome(temp)) {
+					res++;
+				}
+			}
+		}
+		return res;
+	}
+	
+	public boolean isPalindrome(String s) {
+		if(s == null || s.length() == 0) return true;
+		int left = 0, right = s.length() - 1;
+		while(left < right) {
+			if(s.charAt(left) != s.charAt(right)) {
+				return false;
+			}
+			left++;
+			right--;
+		}
+		return true;
+	}
+
+8） 给一些acquire lock 和 release lock 的语句。。 要求写一个程序判断这些语句是否合法。。比如不能acquire一个已经acquired lock.. 不能release一个还没有acquired lock。。 必须要按acquired的反顺序来release lock等等。
+
+public boolean isLegal(List<Integer> locks) {
+		if(locks == null || locks.size() == 0) return true;
+		Deque<Integer> stack = new ArrayDeque<>();
+		for(int i = 0; i < locks.size(); i++) {
+			int num = locks.get(i);
+			if(stack.isEmpty()) {
+				stack.push(num);
+			} else {
+				if(stack.peek() == num) {
+					stack.pop();
+				} else {
+					stack.push(num);
+				}
+			}
+		}
+		return stack.isEmpty();
+	}
